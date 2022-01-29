@@ -60,6 +60,12 @@ app.delete('/api/notes/:id', (req, res) => {
   })
 })
 
+app.put('/api/notes/:id', (req, res) => {
+  Note.findByIdAndUpdate(req.params.id, req.body, {new:true}).then((note) => {
+    console.log(note)
+    res.status(200).json(note)
+  })
+})
 // REQUEST LISTENER
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
