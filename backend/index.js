@@ -7,16 +7,17 @@ const cors = require('cors');
 const Note = require('./models/note');
 
 // MIDDLEWARE
-app.use(express.json())
+const requestLogger = (req, res, next) => {
+  console.log('Method:', req.method)
+  console.log('Path:  ', req.path)
+  console.log('Body:  ', req.body)
+  console.log('---')
+  next()
+}
 app.use(cors());
 app.use(express.static('build'))
-
-// const generateId = (notes) => {
-//   const maxId = notes.length > 0
-//     ? Math.max(...notes.map(n => n.id))
-//     : 0
-//   return maxId + 1
-// }
+app.use(express.json())
+app.use(requestLogger)
 
 // ROUTES
 app.post('/api/notes', (req, res) => {
@@ -48,17 +49,54 @@ app.get('/api/notes', (req, res) => {
   })
 });
 
-app.get('/api/notes/:id', (req, res) => {
-  Note.findById(req.params.id).then(note => {
-    res.json(note)
-  })
+app.get('/api/notes/:id', (req, res, next) => {
+  Note.findById(req.params.id)
+    .then(note => {
+      if (note) {
+        res.json(note)
+      } else {
+        res.status(404).end()
+      }
+    })
+    .catch(err => next(err))
 })
 
-app.delete('/api/notes/:id', (req, res) => {
+app.delete('/api/notes/:id', (req, res, next) => {
   Note.findByIdAndDelete(req.params.id).then(() => {
     res.status(204).end();
   })
+  .catch(err => next(err))
 })
+
+app.put('/api/notes/:id', (req, res, next) => {
+  const originalNote = {
+    content: req.body.content,
+    important: req.body.important
+  }
+  Note.findByIdAndUpdate(req.params.id, originalNote, { new: true })
+    .then((updatedNote) => {
+    res.json(updatedNote)
+  })
+  .catch(err => next(err))
+})
+
+// UNKNOWN ENDPOINT HANDLER
+const unknownEndpoint = (req, res) => {
+  res.status(404).send( {error: 'unknwon endpoint'})
+}
+app.use(unknownEndpoint)
+
+// ERROR HANDLING
+const errorHandler = (err, req, res, next) => {
+  console.error(err.message) 
+
+  if(err.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(err)
+}
+app.use(errorHandler);
 
 app.put('/api/notes/:id', (req, res) => {
   Note.findByIdAndUpdate(req.params.id, req.body, {new:true}).then((note) => {
