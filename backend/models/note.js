@@ -3,11 +3,11 @@ const {Schema} = mongoose
 
 const url = process.env.MONGO_URL;
 
-console.log('connecting to', url);
+console.log('connecting to MongoDB');
 
 mongoose.connect(url)
-  .then(result => {
-    console.log('connected to MongoDB');
+  .then((result) => {
+    console.log('connected to MongoDB', result.connections[0].host);
   })
   .catch((err) => {
     console.log('error connecting to MongoDB: ', err.message)
