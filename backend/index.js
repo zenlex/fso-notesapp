@@ -20,15 +20,8 @@ app.use(express.json())
 app.use(requestLogger)
 
 // ROUTES
-app.post('/api/notes', (req, res) => {
-
+app.post('/api/notes', (req, res, next) => {
   const body = req.body;
-
-  if (body.content === undefined) {
-    return res.status(400).json({
-      error: 'content missing'
-    })
-  }
 
   const note = new Note({
     content: body.content,
@@ -36,7 +29,11 @@ app.post('/api/notes', (req, res) => {
     date: new Date(),
   })
 
-  note.save().then(savedNote => res.json(savedNote))
+  note.save()
+    .then(savedNote => {
+      res.json(savedNote.toJSON())
+    })
+    .catch(err => next(err))
 })
 
 app.get('/', (req, res) => {
@@ -92,18 +89,14 @@ const errorHandler = (err, req, res, next) => {
 
   if(err.name === 'CastError') {
     return res.status(400).send({ error: 'malformatted id' })
+  } else if (err.name === 'ValidationError') {
+    return res.status(400).json({ error: err.message })
   }
 
   next(err)
 }
 app.use(errorHandler);
 
-app.put('/api/notes/:id', (req, res) => {
-  Note.findByIdAndUpdate(req.params.id, req.body, {new:true}).then((note) => {
-    console.log(note)
-    res.status(200).json(note)
-  })
-})
 // REQUEST LISTENER
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
