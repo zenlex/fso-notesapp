@@ -5,8 +5,6 @@ const app = express();
 const cors = require('cors');
 
 const Note = require('./models/note');
-const { response } = require('express');
-
 
 // MIDDLEWARE
 const requestLogger = (req, res, next) => {
@@ -20,14 +18,6 @@ app.use(cors());
 app.use(express.static('build'))
 app.use(express.json())
 app.use(requestLogger)
-
-
-// const generateId = (notes) => {
-//   const maxId = notes.length > 0
-//     ? Math.max(...notes.map(n => n.id))
-//     : 0
-//   return maxId + 1
-// }
 
 // ROUTES
 app.post('/api/notes', (req, res) => {
@@ -101,13 +91,19 @@ const errorHandler = (err, req, res, next) => {
   console.error(err.message) 
 
   if(err.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
+    return res.status(400).send({ error: 'malformatted id' })
   }
 
   next(err)
 }
 app.use(errorHandler);
 
+app.put('/api/notes/:id', (req, res) => {
+  Note.findByIdAndUpdate(req.params.id, req.body, {new:true}).then((note) => {
+    console.log(note)
+    res.status(200).json(note)
+  })
+})
 // REQUEST LISTENER
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
