@@ -1,10 +1,16 @@
 // IMPORTS
-const app = require('./app')
-const http = require('http')
-const config = require('./utils/config')
-const logger = require('./utils/logger')
+const app = require('./app');
+const https = require('https');
+const fs = require('fs');
+const config = require('./utils/config');
+const logger = require('./utils/logger');
 
-const server = http.createServer(app)
+const serverOptions = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('server.crt')
+};
+
+const server = https.createServer(serverOptions, app);
 
 
 // MIDDLEWARE
@@ -12,19 +18,19 @@ const server = http.createServer(app)
 
 // ERROR HANDLING
 const errorHandler = (err, req, res, next) => {
-  console.error(err.message) 
+  console.error(err.message); 
 
   if(err.name === 'CastError') {
-    return res.status(400).send({ error: 'malformatted id' })
+    return res.status(400).send({ error: 'malformatted id' });
   } else if (err.name === 'ValidationError') {
-    return res.status(400).json({ error: err.message })
+    return res.status(400).json({ error: err.message });
   }
 
-  next(err)
-}
+  next(err);
+};
 app.use(errorHandler);
 
 // REQUEST LISTENER
 server.listen(config.PORT, () => {
-  logger.info(`Server running on port ${config.PORT}`)
-})
+  logger.info(`Server running on port ${config.PORT}`);
+});
