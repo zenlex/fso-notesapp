@@ -64,15 +64,27 @@ describe('viewing a specific note', () => {
 });
 
 describe('addition of a new note', () => {
-
   test('succeeds with valid data', async () => {
+    const testUser = {
+      username: 'root',
+      id:'62034b2ca9cee73fa2a0f8f1',
+      password:'sekret'
+    };
+
     const newNote = {
       content: 'async/await simplifies making async calls',
       important: true,
     };
 
+    const loginResponse = await api
+      .post('/api/login')
+      .send(testUser);
+
+    const token = loginResponse.body.token;
+    console.log('token:', token);
     await api
       .post('/api/notes')
+      .set('authorization', `bearer ${token}`)
       .send(newNote)
       .expect(201)
       .expect('Content-Type', /application\/json/);
@@ -92,7 +104,7 @@ describe('addition of a new note', () => {
     await api
       .post('/api/notes')
       .send(newNote)
-      .expect(400);
+      .expect(401);
 
     const notesAtEnd = await helper.notesInDb();
     expect(notesAtEnd).toHaveLength(helper.initialNotes.length);

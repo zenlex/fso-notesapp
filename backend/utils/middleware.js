@@ -1,3 +1,4 @@
+const { response } = require('express');
 const logger = require('./logger');
 
 const requestLogger = (req, res, next) => {
@@ -23,6 +24,10 @@ const errorHandler = (err, req, res, next) => {
     return res.status(400).json({ error: err.message });
   } else if (err.name === 'JsonWebTokenError') {
     return res.status(401).json({ error: 'invalid token' });
+  } else if (err.name === 'TokenExpiredError') {
+    return response.status(401).json({
+      error: 'token expired'
+    });
   }
 
   next(err);
