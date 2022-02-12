@@ -27,8 +27,8 @@
     "express": "^4.17.2",
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.13.14",
-    "mongoose-unique-validator": "^2.0.3"
+    "mongoose": "^6.2.1",
+    "mongoose-unique-validator": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^8.8.0",
