@@ -6,14 +6,12 @@ import Footer from './components/Footer'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import NoteForm from './components/NoteForm'
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
-  const [newNote, setNewNote] = useState('');
   const [showAll, setShowAll] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -33,45 +31,38 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (e) => {
-    e.preventDefault()
-
+  const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({
         username, password
       })
-
       window.localStorage.setItem(
         'loggedNoteAppUser', JSON.stringify(user)
       )
       noteService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      setErrorMessage('wrong credentials')
+    } catch (err) {
+      console.log(err)
+      setErrorMessage(err)
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)
+      }, 3000)
     }
   }
 
-  const noteChangeHandle = (e) => {
-    setNewNote(e.target.value);
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedNoteAppUser');
+    setErrorMessage(`${user.name} logged out`)
+    setUser(null);
+    setTimeout(() => setErrorMessage(null), 3000);
   }
 
-  const addNote = (e) => {
-    e.preventDefault();
-    const noteObj = {
-      content: newNote,
-      date: new Date().toISOString(),
-      important: Math.random() > 0.5
-    }
+
+  const addNote = (noteObj) => {
     noteService
       .create(noteObj)
       .then(returnedNote => {
         setNotes(notes.concat(returnedNote));
-        setNewNote('')
       })
   }
 
@@ -84,10 +75,8 @@ const App = () => {
       .then(returnedNote => {
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
-      .catch(error => {
-        setErrorMessage(
-          `Note '${note.content}' was already removed from server`
-        )
+      .catch(err => {
+        setErrorMessage(err)
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000);
@@ -99,34 +88,41 @@ const App = () => {
 
   return (
     <div>
-      <h1>Notes</h1>
-
       <Notification message={errorMessage} />
 
-      {user === null ?
-        <LoginForm
-          handleLogin={handleLogin}
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-        /> :
+      {user ?
         <div>
           <p>{user.name} logged-in</p>
-          <NoteForm addNote={addNote} noteChangeHandle={noteChangeHandle} newNote={newNote} />
+          <button onClick={handleLogout}>logout</button>
+          <Togglable buttonLabel="new note">
+            <NoteForm
+              createNote={addNote}
+            />
+          </Togglable>
         </div>
+        :
+        <Togglable buttonLabel="login">
+          <LoginForm
+            handleSubmit={handleLogin}
+          />
+        </Togglable>
+
       }
+
+
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
         </button>
       </div>
+
       <ul>
         {notesToShow.map(note =>
           <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} />)}
       </ul>
+
       <Footer />
-    </div>
+    </div >
   )
 }
 
