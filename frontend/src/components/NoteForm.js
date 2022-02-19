@@ -1,14 +1,14 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 const NoteForm = ({ createNote }) => {
-  const [newNote, setNewNote] = useState('');
+  const [newNote, setNewNote] = useState('')
 
   const handleChange = (e) => {
-    setNewNote(e.target.value);
+    setNewNote(e.target.value)
   }
 
   const addNote = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     createNote({
       content: newNote,
       important: Math.random() > 0.5
@@ -31,4 +31,4 @@ const NoteForm = ({ createNote }) => {
   )
 }
 
-export default NoteForm;
+export default NoteForm

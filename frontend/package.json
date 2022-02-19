@@ -7,6 +7,7 @@
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.25.0",
+    "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
@@ -20,7 +21,8 @@
     "server": "json-server -p3001 --watch db.json",
     "build:ui": "rm -rf build && npm run build && cp -r build ../backend",
     "deploy": "cd .. && git subtree push --prefix backend herkou master",
-    "deploy:full": "npm run build:ui && npm run deploy"
+    "deploy:full": "npm run build:ui && npm run deploy",
+    "eslint": "eslint ."
   },
   "eslintConfig": {
     "extends": [
@@ -41,6 +43,7 @@
     ]
   },
   "devDependencies": {
+    "eslint-plugin-jest": "^26.1.1",
     "mini-css-extract-plugin": "2.4.5"
   },
   "proxy": "https://localhost:3001"

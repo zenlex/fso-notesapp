@@ -10,4 +10,4 @@ const exports = {
   login
 }
 
-export default exports 
+export default exports

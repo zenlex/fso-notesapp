@@ -1,18 +1,18 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react'
 import Note from './components/Note'
 import Notification from './components/Notification'
-import noteService from './services/notes';
+import noteService from './services/notes'
 import Footer from './components/Footer'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import NoteForm from './components/NoteForm'
-import Togglable from "./components/Togglable";
+import Togglable from './components/Togglable'
 
 const App = () => {
   //-------STATE MANAGEMENT-------//
-  const [notes, setNotes] = useState([]);
-  const [showAll, setShowAll] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [notes, setNotes] = useState([])
+  const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
 
   const noteFormRef = useRef()
@@ -22,9 +22,9 @@ const App = () => {
     noteService
       .getAll()
       .then(initialNotes => {
-        setNotes(initialNotes);
-      });
-  }, []);
+        setNotes(initialNotes)
+      })
+  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteAppUser')
@@ -56,10 +56,10 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedNoteAppUser');
+    window.localStorage.removeItem('loggedNoteAppUser')
     setErrorMessage(`${user.name} logged out`)
-    setUser(null);
-    setTimeout(() => setErrorMessage(null), 3000);
+    setUser(null)
+    setTimeout(() => setErrorMessage(null), 3000)
   }
 
 
@@ -68,12 +68,12 @@ const App = () => {
     noteService
       .create(noteObj)
       .then(returnedNote => {
-        setNotes(notes.concat(returnedNote));
+        setNotes(notes.concat(returnedNote))
       })
   }
 
   const toggleImportanceOf = id => {
-    const note = notes.find(n => n.id === id);
+    const note = notes.find(n => n.id === id)
     const changedNote = { ...note, important: !note.important }
 
     noteService
@@ -85,13 +85,13 @@ const App = () => {
         setErrorMessage(err)
         setTimeout(() => {
           setErrorMessage(null)
-        }, 5000);
+        }, 5000)
         setNotes(notes.filter(n => n.id !== id))
       })
   }
 
   //-----------RENDER RETURN------------//
-  const notesToShow = showAll ? notes : notes.filter(note => note.important);
+  const notesToShow = showAll ? notes : notes.filter(note => note.important)
 
   return (
     <div>
@@ -101,7 +101,7 @@ const App = () => {
         <div>
           <p>{user.name} logged-in</p>
           <button onClick={handleLogout}>logout</button>
-          <Togglable buttonLabel="new note" ref={noteFormRef}>
+          <Togglable ref={noteFormRef} buttonLabel="add note">
             <NoteForm createNote={addNote} />
           </Togglable>
         </div>
@@ -131,4 +131,4 @@ const App = () => {
   )
 }
 
-export default App;
+export default App

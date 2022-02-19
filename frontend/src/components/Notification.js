@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 const errorStyle = {
   color: 'red',
   background: 'lightgrey',
@@ -18,7 +18,6 @@ const messageStyle = {
   marginBottom: 10,
 }
 const Notification = ({ message }) => {
-  console.log('erk message: ', message)
   if (message === null) {
     return null
   }
@@ -32,4 +31,4 @@ const Notification = ({ message }) => {
   )
 }
 
-export default Notification;
+export default Notification
