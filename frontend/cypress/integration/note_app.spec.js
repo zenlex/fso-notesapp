@@ -1,5 +1,12 @@
 describe('Note app', function () {
   beforeEach(function () {
+    cy.request('POST', 'https://localhost:3001/api/testing/reset')
+    const user = {
+      name: 'Matti Lukkainen',
+      username: 'mluukkai',
+      password: 'salainen'
+    }
+    cy.request('POST', 'https://localhost:3001/api/users/', user)
     cy.visit('http://localhost:3000')
   })
 
@@ -15,18 +22,18 @@ describe('Note app', function () {
 
   it('user can login', function () {
     cy.contains('login').click()
-    cy.get('#username').type('fng')
-    cy.get('#password').type('foobarbaz')
+    cy.get('#username').type('mluukkai')
+    cy.get('#password').type('salainen')
     cy.get('#login-btn').click()
 
-    cy.contains('fing new guy logged-in')
+    cy.contains('Matti Lukkainen')
   })
 
   describe('when logged in', function () {
     beforeEach(function () {
       cy.contains('login').click()
-      cy.get('#username').type('fng')
-      cy.get('#password').type('foobarbaz')
+      cy.get('#username').type('mluukkai')
+      cy.get('#password').type('salainen')
       cy.get('#login-btn').click()
     })
 

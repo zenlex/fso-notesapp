@@ -7,11 +7,12 @@ const cors = require('cors');
 const notesRouter = require('./controllers/notes');
 const usersRouter = require('./controllers/users');
 const loginRouter = require('./controllers/login');
+const testingRouter = require('./controllers/tests');
 const middleware = require('./utils/middleware');
 const logger = require('./utils/logger');
 const mongoose = require('mongoose');
 
-console.log('connecting to MongoDB');
+logger.info('connecting to MongoDB');
 
 mongoose.connect(config.MONGODB_URI)
   .then((result) => {
@@ -26,6 +27,9 @@ app.use(express.static('build'));
 app.use(express.json());
 app.use(middleware.requestLogger);
 
+if (process.env.NODE_ENV === 'test') {
+  app.use('/api/testing/', testingRouter);
+}
 app.use('/api/users', usersRouter);
 app.use('/api/notes', notesRouter);
 app.use('/api/login', loginRouter);
