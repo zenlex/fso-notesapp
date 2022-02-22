@@ -120,7 +120,7 @@ const App = () => {
           show {showAll ? 'important' : 'all'}
         </button>
       </div>
-
+      <h1>Notes:</h1>
       <ul>
         {notesToShow.map(note =>
           <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} />)}

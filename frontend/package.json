@@ -21,7 +21,8 @@
     "build:ui": "rm -rf build && npm run build && cp -r build ../backend",
     "deploy": "cd .. && git subtree push --prefix backend herkou master",
     "deploy:full": "npm run build:ui && npm run deploy",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": [
@@ -43,6 +44,7 @@
   },
   "devDependencies": {
     "@testing-library/user-event": "^13.5.0",
+    "cypress": "^9.5.0",
     "eslint-plugin-jest": "^26.1.1",
     "jest-watch-typeahead": "^0.6.5",
     "mini-css-extract-plugin": "2.4.5"

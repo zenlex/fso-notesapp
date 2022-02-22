@@ -11,7 +11,6 @@ const middleware = require('./utils/middleware');
 const logger = require('./utils/logger');
 const mongoose = require('mongoose');
 
-
 console.log('connecting to MongoDB');
 
 mongoose.connect(config.MONGODB_URI)
