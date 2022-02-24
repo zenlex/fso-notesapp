@@ -7,10 +7,10 @@ describe('Note app', function () {
       password: 'salainen'
     }
     cy.request('POST', 'https://localhost:3001/api/users/', user)
-    cy.visit('http://localhost:3000')
+    cy.visit('https://localhost:3000')
   })
 
-  it.only('login fails with wrong password', function () {
+  it('login fails with wrong password', function () {
     cy.contains('login').click()
     cy.get('#username').type('mluukai')
     cy.get('#password').type('wrong')
@@ -44,17 +44,11 @@ describe('Note app', function () {
 
   describe('when logged in', function () {
     beforeEach(function () {
-      cy.contains('login').click()
-      cy.get('#username').type('mluukkai')
-      cy.get('#password').type('salainen')
-      cy.get('#login-btn').click()
+      cy.login({ username: 'mluukkai', password: 'salainen' })
     })
 
     it('a new note can be created', function () {
-      cy.contains('add note').click()
-      cy.get('#newcontent').type('a note created by cypress')
-      cy.contains('save').click()
-      cy.contains('a note created by cypress')
+      cy.createNote({ content: 'a note created by cypress', important: false })
     })
 
     describe('and a note exists', function () {
