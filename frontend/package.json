@@ -22,7 +22,8 @@
     "deploy": "cd .. && git subtree push --prefix backend herkou master",
     "deploy:full": "npm run build:ui && npm run deploy",
     "eslint": "eslint .",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "test:e2e": "cypress run"
   },
   "eslintConfig": {
     "extends": [
