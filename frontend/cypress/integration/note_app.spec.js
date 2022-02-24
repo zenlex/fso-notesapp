@@ -10,6 +10,19 @@ describe('Note app', function () {
     cy.visit('http://localhost:3000')
   })
 
+  it.only('login fails with wrong password', function () {
+    cy.contains('login').click()
+    cy.get('#username').type('mluukai')
+    cy.get('#password').type('wrong')
+    cy.get('#login-btn').click()
+
+    cy.get('.notification')
+      .should('contain', 'invalid username or password')
+      .and('have.css', 'color', 'rgb(255, 0, 0)')
+      .and('have.css', 'border-style', 'solid')
+
+    cy.get('html').should('not.contain', 'Matti Luukkainen logged in')
+  })
 
   it('front page can be openend', function () {
     cy.contains('Notes')

@@ -25,7 +25,7 @@ const Notification = ({ message }) => {
   const resultMsg = isError ? message.response.data.error : message
 
   return (
-    <div style={isError ? errorStyle : messageStyle}>
+    <div style={isError ? errorStyle : messageStyle} className="notification">
       {resultMsg}
     </div>
   )
