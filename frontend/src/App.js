@@ -92,7 +92,6 @@ const App = () => {
 
   //-----------RENDER RETURN------------//
   const notesToShow = showAll ? notes : notes.filter(note => note.important)
-
   return (
     <div>
       <Notification message={errorMessage} />
