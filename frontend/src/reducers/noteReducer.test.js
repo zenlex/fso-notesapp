@@ -5,7 +5,7 @@ import deepFreeze from 'deep-freeze'
 
 describe('noteReducer', () => {
   test('returns new state with action NEW_NOTE', () => {
-    const state = []
+    const state = { notes:[] }
     const action = {
       type: 'NEW_NOTE',
       data: {
@@ -18,8 +18,8 @@ describe('noteReducer', () => {
     deepFreeze(state)
     const newState = noteReducer(state, action)
 
-    expect(newState).toHaveLength(1)
-    expect(newState).toContainEqual(action.data)
+    expect(newState.notes).toHaveLength(1)
+    expect(newState.notes).toContainEqual(action.data)
   })
 
   test('returns new state with action TOGGLE_IMPORTANCE', () => {

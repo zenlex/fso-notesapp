@@ -1,13 +1,13 @@
-const DEBUG = false;
+const DEBUG = true;
 
 const info = (...params) => {
-  if (process.env.NODE_ENV !== 'test' && !DEBUG) {
+  if (process.env.NODE_ENV !== 'test' || DEBUG) {
     console.log(...params);
   }
 };
 
 const error = (...params) => {
-  if (process.env.NODE_ENV !== 'test' && !DEBUG) {
+  if (process.env.NODE_ENV !== 'test' || DEBUG) {
     console.error(...params);
   }
 };

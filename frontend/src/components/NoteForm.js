@@ -4,7 +4,7 @@ import noteService from '../services/notes'
 import { useDispatch } from 'react-redux'
 import { createNote } from '../actions/actions'
 
-const NoteForm = () => {
+const NoteForm = (props) => {
   const [newNote, setNewNote] = useState('')
   const dispatch = useDispatch()
 
@@ -14,6 +14,9 @@ const NoteForm = () => {
 
   const addNote = (e) => {
     e.preventDefault()
+    if(props.createNoteTest){
+      props.createNoteTest({ content: newNote })
+    }
     setNewNote('')
     // noteFormRef.current.toggleVisibility()
     noteService

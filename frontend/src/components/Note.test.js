@@ -23,7 +23,7 @@ test('clicking the button calls event handler once', async () => {
   const mockHandler = jest.fn()
 
   render(
-    <Note note={note} toggleImportance={mockHandler} />
+    <Note note={note} toggleImportanceOf={mockHandler} />
   )
 
   const button = screen.getByText('make not important')
