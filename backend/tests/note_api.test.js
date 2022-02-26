@@ -5,9 +5,18 @@ const app = require('../app');
 const api = supertest(app);
 const Note = require('../models/note');
 
+const testUser = {
+  username: 'root',
+  password:'sekret'
+};
+  
 beforeEach(async () => {
-  await Note.deleteMany({});
-
+  await api
+    .post('/api/testing/reset');
+  const response = await api
+    .post('/api/users')
+    .send(testUser);
+  testUser.id = response.body.id;
   const noteObjects = helper.initialNotes.map(note => new Note(note));
   const promiseArray = noteObjects.map(note => note.save());
   await Promise.all(promiseArray);
@@ -52,10 +61,8 @@ describe('viewing a specific note', () => {
     expect(resultNote.body).toEqual(processedNoteToView);
   });
 
-  test('fails with status 4040 if note does not exist', async () => {
+  test('fails with status 404 if note does not exist', async () => {
     const validNonexistingId = await helper.nonExistingId();
-
-    console.log(validNonexistingId);
 
     await api
       .get(`/api/notes/${validNonexistingId}`)
@@ -65,11 +72,6 @@ describe('viewing a specific note', () => {
 
 describe('addition of a new note', () => {
   test('succeeds with valid data', async () => {
-    const testUser = {
-      username: 'root',
-      id:'62034b2ca9cee73fa2a0f8f1',
-      password:'sekret'
-    };
 
     const newNote = {
       content: 'async/await simplifies making async calls',
@@ -81,7 +83,6 @@ describe('addition of a new note', () => {
       .send(testUser);
 
     const token = loginResponse.body.token;
-    console.log('token:', token);
     await api
       .post('/api/notes')
       .set('authorization', `bearer ${token}`)

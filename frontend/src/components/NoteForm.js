@@ -1,7 +1,12 @@
-import { useState } from 'react'
 
-const NoteForm = ({ createNote }) => {
+import { useState } from 'react'
+import noteService from '../services/notes'
+import { useDispatch } from 'react-redux'
+import { createNote } from '../actions/actions'
+
+const NoteForm = () => {
   const [newNote, setNewNote] = useState('')
+  const dispatch = useDispatch()
 
   const handleChange = (e) => {
     setNewNote(e.target.value)
@@ -9,14 +14,14 @@ const NoteForm = ({ createNote }) => {
 
   const addNote = (e) => {
     e.preventDefault()
-    createNote({
-      content: newNote,
-      important: false
-    })
     setNewNote('')
+    // noteFormRef.current.toggleVisibility()
+    noteService
+      .create(newNote)
+      .then(returnedNote => {
+        dispatch(createNote(returnedNote))
+      })
   }
-
-
   return (<div>
     <h2>add a new note</h2>
 
