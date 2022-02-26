@@ -10,14 +10,15 @@ const store = createStore(noteReducer)
 noteService
   .getAll()
   .then(initialNotes => {
-    store.dispatch({ type: 'INITIALIZE', data: { notification: null, notes: initialNotes } })
+    console.log('initial notes returned from noteService', initialNotes)
+    store.dispatch({ type: 'INITIALIZE', data: { notification: null, showAll: true, notes: initialNotes } })
+
+    ReactDOM.render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+      document.getElementById('root')
+
+    )
   })
-
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('root')
-
-)
 

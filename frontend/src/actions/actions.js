@@ -13,3 +13,15 @@ export const toggleImportance = (id) => {
   }
 }
 
+export const setNotificationMsg = (msg) => {
+  return {
+    type: 'SET_NOTIFICATION',
+    data: msg
+  }
+}
+
+export const toggleShowAll = () => {
+  return {
+    type: 'TOGGLE_SHOW_ALL'
+  }
+}

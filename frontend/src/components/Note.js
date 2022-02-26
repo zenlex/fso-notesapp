@@ -1,8 +1,9 @@
 import { toggleImportance } from '../actions/actions'
 import { useDispatch } from 'react-redux'
 import noteService from '../services/notes'
+import { setNotificationMsg } from '../actions/actions'
 
-const Note = ({ note, setErrorMessage }) => {
+const Note = ({ note }) => {
   const dispatch = useDispatch()
 
   const toggleImportanceOf = id => {
@@ -13,9 +14,9 @@ const Note = ({ note, setErrorMessage }) => {
         dispatch(toggleImportance(id))
       })
       .catch(err => {
-        setErrorMessage(err)
+        dispatch(setNotificationMsg(err))
         setTimeout(() => {
-          setErrorMessage(null)
+          dispatch(setNotificationMsg(null))
         }, 5000)
       })
   }

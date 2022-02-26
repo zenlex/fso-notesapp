@@ -7,13 +7,14 @@ import LoginForm from './components/LoginForm'
 import NoteForm from './components/NoteForm'
 import Togglable from './components/Togglable'
 import Notes from './components/NotesContainer'
+import { useDispatch } from 'react-redux'
+import { setNotificationMsg } from './actions/actions'
 
 const App = () => {
   //-------STATE MANAGEMENT-------//
-  const [errorMessage, setErrorMessage] = useState(null) //TODO: refactor this as well
+  const dispatch = useDispatch()
   const [user, setUser] = useState(null)
   const noteFormRef = useRef()
-
   //-------HOOKS-------//
 
   // check for logged in user
@@ -40,24 +41,24 @@ const App = () => {
       setUser(user)
     } catch (err) {
       console.log(err)
-      setErrorMessage(err)
+      dispatch(setNotificationMsg(err))
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(setNotificationMsg(null))
       }, 3000)
     }
   }
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedNoteAppUser')
-    setErrorMessage(`${user.name} logged out`)
+    dispatch(setNotificationMsg(`${user.name} logged out`))
     setUser(null)
-    setTimeout(() => setErrorMessage(null), 3000)
+    setTimeout(() => dispatch(setNotificationMsg(null)), 3000)
   }
 
   //-----------RENDER RETURN------------//
   return (
     <div>
-      <Notification message={errorMessage} />
+      <Notification />
 
       {user ?
         <div>
@@ -75,7 +76,7 @@ const App = () => {
         </Togglable>
       }
 
-      <Notes setErrorMessage={setErrorMessage} />
+      <Notes />
       <Footer />
     </div >
   )

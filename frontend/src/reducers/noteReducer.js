@@ -5,7 +5,7 @@ const noteReducer = (state = {}, action) => {
     return action.data
 
   case 'NEW_NOTE':
-    return [...state, action.data]
+    return { ...state, notes:[...state.notes, action.data] }
 
   case 'TOGGLE_IMPORTANCE': {
     const id = action.data
@@ -18,6 +18,9 @@ const noteReducer = (state = {}, action) => {
     console.log('reducer calling notification', action.data)
     return { ...state, notification: action.data }
   }
+
+  case 'TOGGLE_SHOW_ALL':
+    return { ...state, showAll: !state.showAll }
   default:
     return state
   }
