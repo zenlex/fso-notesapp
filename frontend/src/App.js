@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react'
 import Notification from './components/Notification'
 import noteService from './services/notes'
 import Footer from './components/Footer'
-import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import NoteForm from './components/NoteForm'
 import Togglable from './components/Togglable'
@@ -20,6 +19,7 @@ const App = () => {
 
   // check for logged in user
   useEffect(() => {
+  // TODO: refactor out to login form?
     const loggedUserJSON = window.localStorage.getItem('loggedNoteAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -29,38 +29,18 @@ const App = () => {
   }, [])
 
   //-------HANDLERS-------//
-  // TODO: refactor out this bit of state as well (wait until later in FSO to review best practices)
-  const handleLogin = async (username, password) => {
-    try {
-      const user = await loginService.login({
-        username, password
-      })
-      window.localStorage.setItem(
-        'loggedNoteAppUser', JSON.stringify(user)
-      )
-      noteService.setToken(user.token)
-      dispatch(setUser(user))
-    } catch (err) {
-      console.log(err)
-      dispatch(setNotificationMsg(err))
-      setTimeout(() => {
-        dispatch(setNotificationMsg(null))
-      }, 3000)
-    }
-  }
-
+  // TODO: refactor out to login form?
   const handleLogout = () => {
     window.localStorage.removeItem('loggedNoteAppUser')
     dispatch(setNotificationMsg(`${user.name} logged out`))
     dispatch(setUser(null))
     setTimeout(() => dispatch(setNotificationMsg(null)), 3000)
   }
-
   //-----------RENDER RETURN------------//
   return (
     <div>
       <Notification />
-
+      {/* TODO: could refactor this logic into the LoginForm...?*/}
       {user ?
         <div>
           <p>{user.name} logged-in</p>
@@ -71,9 +51,7 @@ const App = () => {
         </div>
         :
         <Togglable buttonLabel="login">
-          <LoginForm
-            handleSubmit={handleLogin}
-          />
+          <LoginForm />
         </Togglable>
       }
 
