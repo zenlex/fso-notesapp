@@ -4,6 +4,9 @@ const noteReducer = (state = {}, action) => {
     console.log('INITIALIZING STATE TO:', action.data)
     return action.data
 
+  case 'SET_USER':
+    return { ...state, user: action.data }
+
   case 'NEW_NOTE':
     return { ...state, notes:[...state.notes, action.data] }
 

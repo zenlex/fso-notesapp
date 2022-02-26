@@ -11,7 +11,7 @@ noteService
   .getAll()
   .then(initialNotes => {
     console.log('initial notes returned from noteService', initialNotes)
-    store.dispatch({ type: 'INITIALIZE', data: { notification: null, showAll: true, notes: initialNotes } })
+    store.dispatch({ type: 'INITIALIZE', data: { user: null, notification: null, showAll: true, notes: initialNotes } })
 
     ReactDOM.render(
       <Provider store={store}>

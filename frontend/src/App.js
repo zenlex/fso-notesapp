@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import Notification from './components/Notification'
 import noteService from './services/notes'
 import Footer from './components/Footer'
@@ -7,14 +7,15 @@ import LoginForm from './components/LoginForm'
 import NoteForm from './components/NoteForm'
 import Togglable from './components/Togglable'
 import Notes from './components/NotesContainer'
-import { useDispatch } from 'react-redux'
-import { setNotificationMsg } from './actions/actions'
+import { useDispatch, useSelector } from 'react-redux'
+import { setNotificationMsg, setUser } from './actions/actions'
 
 const App = () => {
   //-------STATE MANAGEMENT-------//
   const dispatch = useDispatch()
-  const [user, setUser] = useState(null)
+  const user = useSelector( state => state.user )
   const noteFormRef = useRef()
+
   //-------HOOKS-------//
 
   // check for logged in user
@@ -22,7 +23,7 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      dispatch(setUser(user))
       noteService.setToken(user.token)
     }
   }, [])
@@ -38,7 +39,7 @@ const App = () => {
         'loggedNoteAppUser', JSON.stringify(user)
       )
       noteService.setToken(user.token)
-      setUser(user)
+      dispatch(setUser(user))
     } catch (err) {
       console.log(err)
       dispatch(setNotificationMsg(err))
@@ -51,7 +52,7 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('loggedNoteAppUser')
     dispatch(setNotificationMsg(`${user.name} logged out`))
-    setUser(null)
+    dispatch(setUser(null))
     setTimeout(() => dispatch(setNotificationMsg(null)), 3000)
   }
 

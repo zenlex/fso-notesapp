@@ -25,3 +25,10 @@ export const toggleShowAll = () => {
     type: 'TOGGLE_SHOW_ALL'
   }
 }
+
+export const setUser = (userObj) => {
+  return {
+    type: 'SET_USER',
+    data: userObj
+  }
+}
