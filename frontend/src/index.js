@@ -10,7 +10,7 @@ const store = createStore(noteReducer)
 noteService
   .getAll()
   .then(initialNotes => {
-    store.dispatch({ type: 'INITIALIZE', data: initialNotes })
+    store.dispatch({ type: 'INITIALIZE', data: { notification: null, notes: initialNotes } })
   })
 
 ReactDOM.render(
