@@ -1,3 +1,5 @@
+//TODO: fix tests to work with new redux setup. Manual testing is functional. Just have context/ref issues now to sort
+
 import noteReducer from './noteReducer'
 import deepFreeze from 'deep-freeze'
 
