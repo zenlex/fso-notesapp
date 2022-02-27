@@ -21,10 +21,11 @@ const messageStyle = {
 }
 const Notification = () => {
   const message = useSelector(state => state.notification)
+  console.log('message to notification: ', message)
   if (message === null) {
     return null
   }
-  const isError = message instanceof Error
+  const isError = false // message instanceof Error
   const resultMsg = isError ? message.response.data.error : message
 
   return (

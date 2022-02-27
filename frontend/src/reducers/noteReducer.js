@@ -1,34 +1,29 @@
-export const createNote = (noteObj) => {
-  return {
-    type: 'NEW_NOTE',
-    data: noteObj
+import { createSlice } from '@reduxjs/toolkit'
+
+const initialState = []
+
+const noteSlice = createSlice({
+  name: 'notes',
+  initialState,
+  reducers:{
+    createNote(state, action) {
+      console.log('createnote action: ', action)
+      const newNote = action.payload
+      state.push(newNote)
+    },
+
+    toggleImportance(state, action) {
+      console.log(action.payload)
+      const id = action.payload
+      const noteToChange = state.find(n => n.id === id)
+      const changedNote = {
+        ...noteToChange,
+        important: !noteToChange.important
+      }
+      return state.map(note => note.id !== noteToChange.id ? note : changedNote)
+    }
   }
-}
+})
 
-export const toggleImportance = (id) => {
-  return {
-    type: 'TOGGLE_IMPORTANCE',
-    data: id
-  }
-}
-
-const noteReducer = (state = [], action) => {
-  switch (action.type) {
-
-  case 'NEW_NOTE':
-    return [...state, action.data]
-
-  case 'TOGGLE_IMPORTANCE': {
-    const id = action.data
-    const noteToChange = state.find(n => n.id === id)
-    const changedNote = { ...noteToChange, important: !noteToChange.important }
-    return state.map(note => note.id === id ? changedNote : note )
-  }
-
-  default:
-    return state
-  }
-
-}
-
-export default noteReducer
+export const { createNote, toggleImportance } = noteSlice.actions
+export default noteSlice.reducer
