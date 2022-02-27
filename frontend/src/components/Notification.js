@@ -21,7 +21,6 @@ const messageStyle = {
 }
 const Notification = () => {
   const message = useSelector(state => state.notification)
-  console.log('message to notification: ', message)
   if (message === null) {
     return null
   }

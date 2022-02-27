@@ -27,7 +27,7 @@ noteService
           notes: noteReducer,
           filter: filterReducer,
           user: userReducer,
-          notification: notificationReducer
+          notification:notificationReducer
         },
         preloadedState: {
           ...initialState,

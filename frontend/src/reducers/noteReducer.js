@@ -20,7 +20,8 @@ const noteSlice = createSlice({
         ...noteToChange,
         important: !noteToChange.important
       }
-      return state.map(note => note.id !== noteToChange.id ? note : changedNote)
+      const newState = state.map(note => note.id !== noteToChange.id ? note : changedNote)
+      return newState
     }
   }
 })

@@ -45,7 +45,7 @@ const LoginForm = () => {
       dispatch(setUser(user))
     } catch (err) {
       console.log(err)
-      dispatch(setNotificationMsg(err))
+      // dispatch(setNotificationMsg(err))
       setTimeout(() => {
         dispatch(setNotificationMsg(null))
       }, 3000)
