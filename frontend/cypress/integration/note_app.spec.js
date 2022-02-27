@@ -17,7 +17,7 @@ describe('Note app', function () {
     cy.get('#login-btn').click()
 
     cy.get('.notification')
-      .should('contain', 'failed')
+      .should('contain', 'invalid username or password')
       .and('have.css', 'color', 'rgb(255, 0, 0)')
       .and('have.css', 'border-style', 'solid')
 

@@ -28,7 +28,7 @@ const NoteForm = (props) => {
       })
       .catch(err => {
         console.log(err)
-        dispatch(setNotificationMsg({ type:'ERROR', message:err.message }))
+        dispatch(setNotificationMsg({ type:'ERROR', message:err.response.data.error }))
         setTimeout(() => dispatch(setNotificationMsg(null)), 3000)
       })
   }
