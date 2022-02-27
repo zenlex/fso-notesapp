@@ -25,20 +25,18 @@ const Notes = () => {
 
   const notesToShow = notes.filter(noteFilter)
 
-  const toggleImportanceOf = note => {
-    const { id } = note
-    const changedNote = { ...note, important: !note.important }
-    noteService
-      .update(id, changedNote)
-      .then(() => {
-        dispatch(toggleImportance(id))
-      })
-      .catch(err => {
-        dispatch(setNotificationMsg({ type:'ERROR', message:err.message }))
-        setTimeout(() => {
-          dispatch(setNotificationMsg(null))
-        }, 5000)
-      })
+  const toggleImportanceOf = async (note) => {
+    try{
+      const { id } = note
+      const changedNote = { ...note, important: !note.important }
+      await noteService.update(id, changedNote)
+      dispatch(toggleImportance(id))
+    }catch(err) {
+      dispatch(setNotificationMsg({ type:'ERROR', message:err.message }))
+      setTimeout(() => {
+        dispatch(setNotificationMsg(null))
+      }, 5000)
+    }
   }
 
   return (

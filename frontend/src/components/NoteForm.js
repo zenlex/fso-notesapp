@@ -14,23 +14,25 @@ const NoteForm = (props) => {
     setNewNote(e.target.value)
   }
 
-  const addNote = (e) => {
+  const addNote = async (e) => {
     e.preventDefault()
+
+    // mock function injection for unit testing
     if(props.createNoteTest){
       props.createNoteTest({ content: newNote })
     }
+
     setNewNote('')
     noteFormRef.current.toggleVisibility()
-    noteService
-      .create(newNote)
-      .then(returnedNote => {
-        dispatch(createNote(returnedNote))
-      })
-      .catch(err => {
-        console.log(err)
-        dispatch(setNotificationMsg({ type:'ERROR', message:err.response.data.error }))
-        setTimeout(() => dispatch(setNotificationMsg(null)), 3000)
-      })
+    try{
+      const returnedNote = await noteService.create(newNote)
+      dispatch(createNote(returnedNote))
+    }
+    catch(err) {
+      console.log(err)
+      dispatch(setNotificationMsg({ type:'ERROR', message:err.response.data.error }))
+      setTimeout(() => dispatch(setNotificationMsg(null)), 3000)
+    }
   }
   //TODO: get autoFocus to work correctly on add note form
   return (
