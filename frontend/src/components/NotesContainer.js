@@ -1,14 +1,30 @@
 import Note from './Note'
 import { useSelector, useDispatch } from 'react-redux'
-import { toggleShowAll } from '../actions/actions'
-import { toggleImportance, setNotificationMsg } from '../actions/actions'
+import { setFilter } from '../reducers/filterReducer'
+import { toggleImportance } from '../reducers/noteReducer'
+import { setNotificationMsg } from '../reducers/notificationReducer'
 import noteService from '../services/notes'
 
 const Notes = () => {
   const dispatch = useDispatch()
   const notes = useSelector(state => state.notes)
-  const showAll = useSelector(state => state.showAll)
-  const notesToShow = showAll ? notes : notes.filter(note => note.important)
+  console.log({ notes })
+  const filterState = useSelector(state => state.filter)
+  const noteFilter = (n) => {
+    if(filterState === 'IMPORTANT'){
+      return n.important
+    }
+    if(filterState === 'NONIMPORTANT'){
+      return !n.important
+    }
+    return true
+  }
+
+  const filterSelected = (value) => {
+    dispatch(setFilter(value))
+  }
+
+  const notesToShow = notes.filter(noteFilter)
 
   const toggleImportanceOf = note => {
     const { id } = note
@@ -29,9 +45,14 @@ const Notes = () => {
   return (
     <>
       <div>
-        <button onClick={() => dispatch(toggleShowAll())}>
-          show {showAll ? 'important' : 'all'}
-        </button>
+        <div>
+        all <input type="radio" name="filter" checked={filterState === 'ALL'}
+            onChange={() => filterSelected('ALL')}/>
+        important <input type="radio" name="filter"
+            onChange={() => filterSelected('IMPORTANT')} checked={filterState === 'IMPORTANT'}/>
+        nonimportant <input type="radio" name="filter"
+            onChange={() => filterSelected('NONIMPORTANT')} checked={filterState === 'NONIMPORTANT'}/>
+        </div>
       </div>
       <h1>Notes:</h1>
       <ul>
