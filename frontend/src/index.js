@@ -1,24 +1,39 @@
 import ReactDOM from 'react-dom'
 import App from './App'
 import './index.css'
-import { createStore } from 'redux'
+import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 import noteReducer from './reducers/noteReducer'
+import filterReducer from './reducers/filterReducer'
 import noteService from './services/notes'
+import userReducer from './reducers/userReducer'
+import notificationReducer from './reducers/notificationReducer'
 
-const store = createStore(noteReducer)
+const reducer = combineReducers({
+  notes: noteReducer,
+  filter: filterReducer,
+  user: userReducer,
+  notification: notificationReducer
+})
+const initialState =
+  {
+    user: null,
+    notification: null,
+    filter:'ALL',
+    notes: []
+  }
+
 noteService
   .getAll()
   .then(initialNotes => {
-    console.log('initial notes returned from noteService', initialNotes)
-    store.dispatch({ type: 'INITIALIZE', data: { user: null, notification: null, showAll: true, notes: initialNotes } })
+    const store = createStore(reducer, { ...initialState, notes: initialNotes })
+    store.subscribe(() => console.log('Current Store: ', store.getState()))
 
     ReactDOM.render(
       <Provider store={store}>
         <App />
       </Provider>,
       document.getElementById('root')
-
     )
   })
 
