@@ -20,16 +20,16 @@ const messageStyle = {
   marginBottom: 10,
 }
 const Notification = () => {
-  const message = useSelector(state => state.notification)
-  if (message === null) {
+  const notification = useSelector(state => state.notification)
+
+  console.log('Notification received by component: ', notification)
+  if (!notification) {
     return null
   }
-  const isError = false // message instanceof Error
-  const resultMsg = isError ? message.response.data.error : message
 
   return (
-    <div style={isError ? errorStyle : messageStyle} className="notification">
-      {resultMsg}
+    <div style={notification.type === 'ERROR' ? errorStyle : messageStyle } className="notification">
+      {notification.message}
     </div>
   )
 }

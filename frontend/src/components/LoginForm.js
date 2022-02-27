@@ -28,7 +28,7 @@ const LoginForm = () => {
 
   const handleLogout = () => {
     window.sessionStorage.removeItem('loggedNoteAppUser')
-    dispatch(setNotificationMsg(`${user.name} logged out`))
+    dispatch(setNotificationMsg({ type: 'SUCCESS', message:`${user.name} logged out` }))
     dispatch(setUser(null))
     setTimeout(() => dispatch(setNotificationMsg(null)), 3000)
   }
@@ -45,7 +45,7 @@ const LoginForm = () => {
       dispatch(setUser(user))
     } catch (err) {
       console.log(err)
-      // dispatch(setNotificationMsg(err))
+      dispatch(setNotificationMsg({ type:'ERROR', message: err.message }))
       setTimeout(() => {
         dispatch(setNotificationMsg(null))
       }, 3000)
