@@ -22,9 +22,13 @@ const noteSlice = createSlice({
       }
       const newState = state.map(note => note.id !== noteToChange.id ? note : changedNote)
       return newState
+    },
+
+    setNotes(state, action)  {
+      return action.payload
     }
   }
 })
 
-export const { createNote, toggleImportance } = noteSlice.actions
+export const { createNote, toggleImportance, setNotes } = noteSlice.actions
 export default noteSlice.reducer

@@ -8,7 +8,6 @@ import noteService from '../services/notes'
 const Notes = () => {
   const dispatch = useDispatch()
   const notes = useSelector(state => state.notes)
-  console.log({ notes })
   const filterState = useSelector(state => state.filter)
   const noteFilter = (n) => {
     if(filterState === 'IMPORTANT'){
