@@ -1,12 +1,11 @@
 
 import { useState, useRef } from 'react'
-import { useDispatch } from 'react-redux'
 import { createNote } from '../reducers/noteReducer'
 import Togglable from './Togglable'
+import { connect } from 'react-redux'
 
 const NoteForm = (props) => {
   const [newNote, setNewNote] = useState('')
-  const dispatch = useDispatch()
   const noteFormRef = useRef(null)
   const handleChange = (e) => {
     setNewNote(e.target.value)
@@ -22,7 +21,7 @@ const NoteForm = (props) => {
     }
 
     noteFormRef.current.toggleVisibility()
-    dispatch(createNote(newNote))
+    props.createNote(newNote)
   }
 
   //TODO: get autoFocus to work correctly on add note form
@@ -46,4 +45,4 @@ const NoteForm = (props) => {
   )
 }
 
-export default NoteForm
+export default connect(null, { createNote })(NoteForm)
