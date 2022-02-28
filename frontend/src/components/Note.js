@@ -1,5 +1,5 @@
 
-const Note = ({ note, toggleImportanceOf }) => {
+const Note = ({ note, handleClick }) => {
   const label = note.important
     ? 'make not important'
     : 'make important'
@@ -9,7 +9,7 @@ const Note = ({ note, toggleImportanceOf }) => {
       <span>
         {note.content}
       </span>
-      <button onClick={() => toggleImportanceOf(note)}>{label}</button>
+      <button onClick={() => handleClick(note)}>{label}</button>
     </li>
   )
 }

@@ -33,6 +33,7 @@ const noteSlice = createSlice({
 export const { appendNote, toggleImportance, setNotes } = noteSlice.actions
 
 export const initializeNotes = () => {
+  console.log('initializeNotes triggered')
   return async dispatch => {
     try{
       const notes = await noteService.getAll()
@@ -50,6 +51,19 @@ export const createNote = content => {
       dispatch(appendNote(newNote))
     }catch(err){
       dispatch(setAlert({ type:'ERROR', message:err.response.data.error }, 3))
+    }
+  }
+}
+
+export const toggleImportanceOf = (note) => {
+  return async dispatch => {
+    try{
+      const { id } = note
+      const changedNote = { ...note, important: !note.important }
+      await noteService.update(id, changedNote)
+      dispatch(toggleImportance(id))
+    }catch(err) {
+      dispatch(setAlert({ type:'ERROR', message:err.message }, 3))
     }
   }
 }
