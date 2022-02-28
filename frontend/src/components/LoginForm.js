@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setNotificationMsg } from '../reducers/notificationReducer'
+import { setAlert } from '../reducers/notificationReducer'
 import { setUser } from '../reducers/userReducer'
 import loginService from '../services/login'
 import noteService from '../services/notes'
@@ -28,7 +28,7 @@ const LoginForm = () => {
 
   const handleLogout = () => {
     window.sessionStorage.removeItem('loggedNoteAppUser')
-    dispatch(setNotificationMsg({ type: 'SUCCESS', message:`${user.name} logged out` }))
+    dispatch(setAlert({ type: 'SUCCESS', message:`${user.name} logged out` }, 3))
     dispatch(setUser(null))
   }
 
@@ -44,10 +44,7 @@ const LoginForm = () => {
       dispatch(setUser(user))
     } catch (err) {
       console.log(err)
-      dispatch(setNotificationMsg({ type:'ERROR', message: err.response.data.error }))
-      setTimeout(() => {
-        dispatch(setNotificationMsg(null))
-      }, 3000)
+      dispatch(setAlert({ type:'ERROR', message: err.response.data.error }, 3))
     }
   }
 

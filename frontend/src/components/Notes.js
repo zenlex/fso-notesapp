@@ -2,28 +2,23 @@ import Note from './Note'
 import { useSelector, useDispatch } from 'react-redux'
 import { setFilter } from '../reducers/filterReducer'
 import { toggleImportance } from '../reducers/noteReducer'
-import { setNotificationMsg } from '../reducers/notificationReducer'
+import { setAlert } from '../reducers/notificationReducer'
 import noteService from '../services/notes'
 
 const Notes = () => {
   const dispatch = useDispatch()
-  const notes = useSelector(state => state.notes)
-  const filterState = useSelector(state => state.filter)
-  const noteFilter = (n) => {
-    if(filterState === 'IMPORTANT'){
-      return n.important
+  const { notes, filter } = useSelector(( { filter, notes } ) => {
+    if(filter === 'ALL'){
+      return { notes, filter }
     }
-    if(filterState === 'NONIMPORTANT'){
-      return !n.important
-    }
-    return true
-  }
+    return filter === 'IMPORTANT'
+      ? { notes: notes.filter(n => n.important), filter }
+      : { notes: notes.filter(n => !n.important), filter }
+  })
 
   const filterSelected = (value) => {
     dispatch(setFilter(value))
   }
-
-  const notesToShow = notes.filter(noteFilter)
 
   const toggleImportanceOf = async (note) => {
     try{
@@ -32,7 +27,7 @@ const Notes = () => {
       await noteService.update(id, changedNote)
       dispatch(toggleImportance(id))
     }catch(err) {
-      dispatch(setNotificationMsg({ type:'ERROR', message:err.message }))
+      dispatch(setAlert({ type:'ERROR', message:err.message }, 3))
     }
   }
 
@@ -40,17 +35,17 @@ const Notes = () => {
     <>
       <div>
         <div>
-        all <input type="radio" name="filter" checked={filterState === 'ALL'}
+        all <input type="radio" name="filter" checked={filter === 'ALL'}
             onChange={() => filterSelected('ALL')}/>
         important <input type="radio" name="filter"
-            onChange={() => filterSelected('IMPORTANT')} checked={filterState === 'IMPORTANT'}/>
+            onChange={() => filterSelected('IMPORTANT')} checked={filter === 'IMPORTANT'}/>
         nonimportant <input type="radio" name="filter"
-            onChange={() => filterSelected('NONIMPORTANT')} checked={filterState === 'NONIMPORTANT'}/>
+            onChange={() => filterSelected('NONIMPORTANT')} checked={filter === 'NONIMPORTANT'}/>
         </div>
       </div>
       <h1>Notes:</h1>
       <ul>
-        {notesToShow.map(note =>
+        {notes.map(note =>
           <Note key={note.id} note={note} toggleImportanceOf={toggleImportanceOf} />)} {/*TODO: refactor prop drilling of errormessage*/}
       </ul>
     </>

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import noteService from '../services/notes'
-import { setNotificationMsg } from './notificationReducer'
+import { setAlert } from './notificationReducer'
 
 const initialState = []
 
@@ -38,7 +38,7 @@ export const initializeNotes = () => {
       const notes = await noteService.getAll()
       dispatch(setNotes(notes))
     }catch(err){
-      dispatch(setNotificationMsg({ type:'ERROR', message:err.response.data.error }))
+      dispatch(setAlert({ type:'ERROR', message:err.response.data.error }, 3))
     }
   }
 }
@@ -49,7 +49,7 @@ export const createNote = content => {
       const newNote = await noteService.create(content)
       dispatch(appendNote(newNote))
     }catch(err){
-      dispatch(setNotificationMsg({ type:'ERROR', message:err.response.data.error }))
+      dispatch(setAlert({ type:'ERROR', message:err.response.data.error }, 3))
     }
   }
 }
