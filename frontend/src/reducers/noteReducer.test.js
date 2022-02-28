@@ -2,10 +2,10 @@ import noteReducer from './noteReducer'
 import deepFreeze from 'deep-freeze'
 
 describe('noteReducer', () => {
-  test('returns new state with action notes/createNote', () => {
+  test('returns new state with action notes/appendNote', () => {
     const state = []
     const action = {
-      type: 'notes/createNote',
+      type: 'notes/appendNote',
       payload: { content: 'the app state is in the redux store', important: false }
     }
 

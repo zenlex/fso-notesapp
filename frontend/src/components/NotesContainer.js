@@ -33,9 +33,6 @@ const Notes = () => {
       dispatch(toggleImportance(id))
     }catch(err) {
       dispatch(setNotificationMsg({ type:'ERROR', message:err.message }))
-      setTimeout(() => {
-        dispatch(setNotificationMsg(null))
-      }, 5000)
     }
   }
 

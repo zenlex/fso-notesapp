@@ -30,7 +30,6 @@ const LoginForm = () => {
     window.sessionStorage.removeItem('loggedNoteAppUser')
     dispatch(setNotificationMsg({ type: 'SUCCESS', message:`${user.name} logged out` }))
     dispatch(setUser(null))
-    setTimeout(() => dispatch(setNotificationMsg(null)), 3000)
   }
 
   const handleLogin = async (username, password) => {

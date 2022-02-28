@@ -1,4 +1,4 @@
-const DEBUG = false;
+const DEBUG = true;
 
 const info = (...params) => {
   if (process.env.NODE_ENV !== 'test' || DEBUG) {

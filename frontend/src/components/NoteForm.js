@@ -1,8 +1,6 @@
 
 import { useState, useRef } from 'react'
-import noteService from '../services/notes'
 import { useDispatch } from 'react-redux'
-import { setNotificationMsg } from '../reducers/notificationReducer'
 import { createNote } from '../reducers/noteReducer'
 import Togglable from './Togglable'
 
@@ -16,24 +14,17 @@ const NoteForm = (props) => {
 
   const addNote = async (e) => {
     e.preventDefault()
+    setNewNote('')
 
-    // mock function injection for unit testing
+    // mock function injection for unit testing - refactor
     if(props.createNoteTest){
       props.createNoteTest({ content: newNote })
     }
 
-    setNewNote('')
     noteFormRef.current.toggleVisibility()
-    try{
-      const returnedNote = await noteService.create(newNote)
-      dispatch(createNote(returnedNote))
-    }
-    catch(err) {
-      console.log(err)
-      dispatch(setNotificationMsg({ type:'ERROR', message:err.response.data.error }))
-      setTimeout(() => dispatch(setNotificationMsg(null)), 3000)
-    }
+    dispatch(createNote(newNote))
   }
+
   //TODO: get autoFocus to work correctly on add note form
   return (
     <Togglable buttonLabel="add note" ref={noteFormRef}>
