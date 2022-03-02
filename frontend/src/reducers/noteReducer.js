@@ -1,19 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 import noteService from '../services/notes'
 import { setAlert } from './notificationReducer'
-
 const initialState = []
 
 const noteSlice = createSlice({
   name: 'notes',
   initialState,
-  reducers:{
+  reducers: {
     appendNote(state, action) {
       state.push(action.payload)
     },
 
     toggleImportance(state, action) {
-      console.log(action.payload)
       const id = action.payload
       const noteToChange = state.find(n => n.id === id)
       const changedNote = {
@@ -24,7 +22,7 @@ const noteSlice = createSlice({
       return newState
     },
 
-    setNotes(state, action)  {
+    setNotes(state, action) {
       return action.payload
     }
   }
@@ -33,37 +31,36 @@ const noteSlice = createSlice({
 export const { appendNote, toggleImportance, setNotes } = noteSlice.actions
 
 export const initializeNotes = () => {
-  console.log('initializeNotes triggered')
   return async dispatch => {
-    try{
+    try {
       const notes = await noteService.getAll()
       dispatch(setNotes(notes))
-    }catch(err){
-      dispatch(setAlert({ type:'ERROR', message:err.response.data.error }, 3))
+    } catch (err) {
+      dispatch(setAlert({ type: 'ERROR', message: err.response.data.error }, 3))
     }
   }
 }
 
-export const createNote = content => {
+export const createNote = (content) => {
   return async dispatch => {
-    try{
-      const newNote = await noteService.create(content)
-      dispatch(appendNote(newNote))
-    }catch(err){
-      dispatch(setAlert({ type:'ERROR', message:err.response.data.error }, 3))
+    try {
+      // const newNote = await noteService.create(content)
+      dispatch(appendNote(content))
+    } catch (err) {
+      dispatch(setAlert({ type: 'ERROR', message: err.response.data.error }, 3))
     }
   }
 }
 
 export const toggleImportanceOf = (note) => {
   return async dispatch => {
-    try{
+    try {
       const { id } = note
       const changedNote = { ...note, important: !note.important }
       await noteService.update(id, changedNote)
       dispatch(toggleImportance(id))
-    }catch(err) {
-      dispatch(setAlert({ type:'ERROR', message:err.message }, 3))
+    } catch (err) {
+      dispatch(setAlert({ type: 'ERROR', message: err.message }, 3))
     }
   }
 }

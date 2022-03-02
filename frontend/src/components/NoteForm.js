@@ -3,25 +3,27 @@ import { useState, useRef } from 'react'
 import { createNote } from '../reducers/noteReducer'
 import Togglable from './Togglable'
 import { connect } from 'react-redux'
+import useResource from '../hooks'
 
 const NoteForm = (props) => {
+  const createNote = useResource('/api/notes').create
   const [newNote, setNewNote] = useState('')
   const noteFormRef = useRef(null)
   const handleChange = (e) => {
     setNewNote(e.target.value)
   }
 
-  const addNote = async (e) => {
+  const addNote = (e) => {
     e.preventDefault()
     setNewNote('')
 
     // mock function injection for unit testing - refactor
-    if(props.createNoteTest){
+    if (props.createNoteTest) {
       props.createNoteTest({ content: newNote })
     }
 
     noteFormRef.current.toggleVisibility()
-    props.createNote(newNote)
+    createNote(newNote)
   }
 
   //TODO: get autoFocus to work correctly on add note form
