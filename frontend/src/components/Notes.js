@@ -3,14 +3,12 @@ import { connect } from 'react-redux'
 import Filter from './Filter'
 import { useResource } from '../hooks'
 
-const Notes = () => {
-  const { data, toggleImportance } = useResource()
+const Notes = ({ notes }) => {
+  const { data, toggleImportance, fetchAllNotes } = useResource()
   if(!data){
+    fetchAllNotes()
     return('Loading...')
   }
-
-  const notes = data
-  console.log({ notes })
   return (
     <>
       <div>

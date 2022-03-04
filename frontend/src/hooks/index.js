@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
-import axios from 'axios'
-import { useEffect, useCallback } from 'react'
+import { useCallback } from 'react'
 
-import { shallowEqual, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { createNote, initializeNotes, toggleImportanceOf, updateNote } from '../reducers/noteReducer'
 
 export const useResource = (url) => {
@@ -18,8 +17,6 @@ export const useResource = (url) => {
     data: state.notes,
   }))
 
-  console.log(data)
-
   const dispatch = useDispatch()
 
   const boundGetAll = useCallback(() => {
@@ -34,9 +31,9 @@ export const useResource = (url) => {
     return dispatch(toggleImportanceOf(...args))
   }, [dispatch])
 
-  useEffect(() => {
-    if(!data) boundGetAll()
-  }, [boundGetAll, data])
+  // useEffect(() => {
+  //   if(!data) boundGetAll()
+  // }, [boundGetAll, data])
 
   return {
     data,
