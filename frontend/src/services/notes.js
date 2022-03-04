@@ -1,14 +1,15 @@
 import axios from 'axios'
+axios.defaults.baseURL = 'https://localhost:3001/'
+import { useSelector } from 'react-redux'
 const baseUrl = '/api/notes'
-let token = null
 
-const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+const getAll = async () => {
+  const response = await axios.get(baseUrl)
+  return response.data
 }
 
 const create = async (content) => {
-  console.log('calling create in the wrong place')
+  const token = useSelector(state => ({ token: state.user.token }))
   const config = {
     headers: { Authorization: token },
   }
@@ -16,9 +17,9 @@ const create = async (content) => {
   return response.data
 }
 
-const update = (id, newObject) => {
-  const request = axios.put(`${baseUrl}/${id}`, newObject)
-  return request.then(response => response.data)
+const update = async (id, newObject) => {
+  const response = await axios.put(`${baseUrl}/${id}`, newObject)
+  return response.data
 }
 
 const exports = {

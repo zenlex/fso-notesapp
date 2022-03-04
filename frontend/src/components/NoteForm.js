@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import useResource from '../hooks'
 
 const NoteForm = (props) => {
-  const createNote = useResource('/api/notes').create
+  const { createNote } = useResource()
   const [newNote, setNewNote] = useState('')
   const noteFormRef = useRef(null)
   const handleChange = (e) => {

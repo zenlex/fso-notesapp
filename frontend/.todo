@@ -1,1 +1,2 @@
-Fix Notification system - split errors and messages into two different state fields...?
+Decide on an approach to untangle the duplication of noteservice + redux + useResource hook. May need to simplify more like the example....
+

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import noteService from '../services/notes'
 import { setAlert } from './notificationReducer'
-const initialState = []
+const initialState = null
 
 const noteSlice = createSlice({
   name: 'notes',
@@ -44,7 +44,7 @@ export const initializeNotes = () => {
 export const createNote = (content) => {
   return async dispatch => {
     try {
-      // const newNote = await noteService.create(content)
+      await noteService.create(content)
       dispatch(appendNote(content))
     } catch (err) {
       dispatch(setAlert({ type: 'ERROR', message: err.response.data.error }, 3))

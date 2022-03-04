@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-vars */
 import axios from 'axios'
-axios.defaults.baseURL = 'https://localhost:3001/'
-import { useDispatch, useSelector } from 'react-redux'
-import { createNote, initializeNotes } from '../reducers/noteReducer'
+import { useEffect, useCallback } from 'react'
+
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
+import { createNote, initializeNotes, toggleImportanceOf, updateNote } from '../reducers/noteReducer'
+
 export const useResource = (url) => {
   const token = useSelector(state => {
     if (state.user) {
@@ -10,33 +13,36 @@ export const useResource = (url) => {
       return null
     }
   })
+
+  const { data } = useSelector(state => ({
+    data: state.notes,
+  }))
+
+  console.log(data)
+
   const dispatch = useDispatch()
 
-  const getAll = async () => {
-    const response = await axios.get(url)
-    dispatch(initializeNotes(response.data))
-    return response.data
-  }
+  const boundGetAll = useCallback(() => {
+    return dispatch(initializeNotes())
+  }, [dispatch])
 
-  const create = async (content) => {
-    console.log('calling create within useResource hook')
-    const config = {
-      headers: { Authorization: token },
-    }
-    const response = await axios.post(url, { content }, config)
-    dispatch(createNote(response.data))
-    return response.data
-  }
+  const boundCreate = useCallback((...args) => {
+    return dispatch(createNote(...args))
+  }, [dispatch])
 
-  const update = (id, newObject) => {
-    const request = axios.put(`${url}/${id}`, newObject)
-    return request.then(response => response.data)
-  }
+  const boundToggleImport = useCallback((...args) => {
+    return dispatch(toggleImportanceOf(...args))
+  }, [dispatch])
+
+  useEffect(() => {
+    if(!data) boundGetAll()
+  }, [boundGetAll, data])
 
   return {
-    getAll,
-    create,
-    update,
+    data,
+    fetchAllNotes: boundGetAll,
+    createNote: boundCreate,
+    toggleImportance: boundToggleImport
   }
 }
 export default useResource
