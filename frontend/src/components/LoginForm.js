@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setAlert } from '../reducers/notificationReducer'
 import { setUser } from '../reducers/userReducer'
 import loginService from '../services/login'
-import noteService from '../services/notes'
+// import noteService from '../services/notes'
 import Togglable from './Togglable'
 
 const LoginForm = () => {
@@ -20,15 +20,14 @@ const LoginForm = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       dispatch(setUser(user))
-      noteService.setToken(user.token)
     }
   }, [])
 
-  let user = useSelector( state => state.user)
+  let user = useSelector(state => state.user)
 
   const handleLogout = () => {
     window.sessionStorage.removeItem('loggedNoteAppUser')
-    dispatch(setAlert({ type: 'SUCCESS', message:`${user.name} logged out` }, 3))
+    dispatch(setAlert({ type: 'SUCCESS', message: `${user.name} logged out` }, 3))
     dispatch(setUser(null))
   }
 
@@ -40,22 +39,21 @@ const LoginForm = () => {
       window.sessionStorage.setItem(
         'loggedNoteAppUser', JSON.stringify(user)
       )
-      noteService.setToken(user.token)
       dispatch(setUser(user))
     } catch (err) {
-      console.log(err)
-      dispatch(setAlert({ type:'ERROR', message: err.response.data.error }, 3))
+      console.error(err)
+      dispatch(setAlert({ type: 'ERROR', message: err.response.data.error }, 3))
     }
   }
 
-  if(user){
-    return(
+  if (user) {
+    return (
       <div>
         <p>{user.name} logged-in</p>
         <button onClick={handleLogout}>logout</button>
       </div>
     )
-  }else{
+  } else {
     return (
       <Togglable buttonLabel="login">
         <form onSubmit={(e) => {
@@ -65,7 +63,7 @@ const LoginForm = () => {
           setPassword('')
         }}>
           <div>
-        username
+            username
             <input
               type="text"
               value={username}
@@ -74,7 +72,7 @@ const LoginForm = () => {
             />
           </div>
           <div>
-        password
+            password
             <input
               type="password"
               value={password}

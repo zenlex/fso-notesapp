@@ -1,10 +1,14 @@
 import Note from './Note'
-import { toggleImportanceOf } from '../reducers/noteReducer'
 import { connect } from 'react-redux'
 import Filter from './Filter'
+import { useResource } from '../hooks'
 
-const Notes = ({ notes, toggleImportanceOf }) => {
-
+const Notes = ({ notes }) => {
+  const { data, toggleImportance, fetchAllNotes } = useResource()
+  if(!data){
+    fetchAllNotes()
+    return('Loading...')
+  }
   return (
     <>
       <div>
@@ -13,7 +17,7 @@ const Notes = ({ notes, toggleImportanceOf }) => {
       <h1>Notes:</h1>
       <ul>
         {notes.length > 0 && notes.map(note =>
-          <Note key={note.id} note={note} handleClick={toggleImportanceOf} />)} {/*TODO: refactor prop drilling of errormessage*/}
+          <Note key={note.id} note={note} handleClick={toggleImportance} />)} {/*TODO: refactor prop drilling of errormessage*/}
       </ul>
     </>
   )
@@ -35,9 +39,5 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = {
-  toggleImportanceOf
-}
-
-const ConnectedNotes = connect(mapStateToProps, mapDispatchToProps)(Notes)
+const ConnectedNotes = connect(mapStateToProps, null)(Notes)
 export default ConnectedNotes

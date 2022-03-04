@@ -3,20 +3,13 @@ import Footer from './components/Footer'
 import LoginForm from './components/LoginForm'
 import NoteForm from './components/NoteForm'
 import Notes from './components/Notes'
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
-import { initializeNotes } from './reducers/noteReducer'
+import { useSelector } from 'react-redux'
 
 const App = () => {
   //-------STATE MANAGEMENT-------//
   const user = useSelector( state => state.user )
-  const dispatch = useDispatch()
 
   //-------HOOKS-------//
-  useEffect(() => {
-    dispatch(initializeNotes())
-  }, [])
-
   //-------HANDLERS-------//
   //-----------RENDER RETURN------------//
   return (
@@ -24,7 +17,7 @@ const App = () => {
       <Notification />
       <LoginForm />
       {user &&<NoteForm />}
-      <Notes />
+      {user && <Notes />}
       <Footer />
     </div >
   )

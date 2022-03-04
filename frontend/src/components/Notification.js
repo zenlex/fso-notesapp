@@ -1,4 +1,3 @@
-import React from 'react'
 import { useSelector } from 'react-redux'
 
 const errorStyle = {
@@ -22,13 +21,12 @@ const messageStyle = {
 const Notification = () => {
   const notification = useSelector(state => state.notification)
 
-  console.log('Notification received by component: ', notification)
   if (!notification) {
     return null
   }
 
   return (
-    <div style={notification.type === 'ERROR' ? errorStyle : messageStyle } className="notification">
+    <div style={notification.type === 'ERROR' ? errorStyle : messageStyle} className="notification">
       {notification.message}
     </div>
   )
