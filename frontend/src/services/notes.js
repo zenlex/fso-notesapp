@@ -1,5 +1,5 @@
 import axios from 'axios'
-axios.defaults.baseURL = 'https://localhost:3001/'
+axios.defaults.baseURL = 'https://localhost:3000/'
 import { useSelector } from 'react-redux'
 const baseUrl = '/api/notes'
 
